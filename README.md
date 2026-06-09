@@ -1,86 +1,97 @@
-# Distorted Visual Sequence Pattern Recognition
+# Robust Text Sequence Recognition from Distorted Grayscale Images
 
-End-to-end deep learning solution for recognizing distorted grayscale text sequences from images.
-The project uses a CRNN architecture: CNN feature extractor + BiLSTM sequence encoder + CTC loss.
+This repository contains the final notebook and prediction file for the distorted visual sequence pattern recognition challenge.
 
-## What This Satisfies
+The task is to recognize ordered character sequences from noisy, blurred, overlapping, occluded, and deformed grayscale images. The solution uses a custom CRNN model trained from scratch: CNN feature extraction, Bidirectional LSTM sequence modeling, and CTC loss.
 
-- Handles noisy, blurred, occluded, overlapping, and irregularly spaced grayscale sequences.
-- Trains from image-label pairs without character-level bounding boxes.
-- Evaluates validation performance with Character Error Rate (CER).
-- Generates the required submission CSV:
+## Final Submission Files
+
+- `notebooks/notebook_navya_24119034.ipynb`
+- `outputs/submission_navya_24119034.csv`
+
+The submission CSV follows the required format:
 
 ```csv
 image,prediction
-test-0.png,AXU323
+test-0.png,QVTQ8A
+test-1.png,7PSW9D
 ```
 
-## Expected Dataset Layout
+## Notebook Contents
 
-Place the downloaded dataset in `data/` using one of these common layouts:
+The notebook includes the complete workflow:
+
+- project overview and requirement coverage
+- dataset extraction and loading
+- visual inspection of distorted grayscale images
+- label distribution and character vocabulary analysis
+- preprocessing and augmentation
+- custom CNN + Bidirectional LSTM architecture
+- CTC loss training
+- validation using Character Error Rate
+- exact match accuracy for additional evaluation
+- train-validation overlap check
+- final test prediction and ordered CSV generation
+
+## Model Summary
+
+No pretrained model is used.
+
+The architecture is implemented directly inside the notebook:
 
 ```text
-data/
-  train/
-    train-0.png
-    train-1.png
-  test/
-    test-0.png
-    test-1.png
-  train_labels.csv
+Input grayscale image
+→ Custom CNN feature extractor
+→ Feature map reshaped into a left-to-right sequence
+→ Bidirectional LSTM sequence encoder
+→ Linear character classifier
+→ CTC decoding
 ```
 
-or:
+## Dataset
+
+The dataset is not committed to the repository.
+
+Expected Colab/Drive setup:
 
 ```text
-data/
+Cig_Ai_open_project/
+  notebook_navya_24119034.ipynb
+  cig_ps.zip
+  outputs/
+    checkpoints/
+      best.pt
+    submission_navya_24119034.csv
+```
+
+After extraction in Colab, the dataset should appear as:
+
+```text
+/content/data/cig_ps/
   train_images/
   test_images/
-  labels.csv
+  train-labels.csv
 ```
 
-The label CSV should contain image filenames and labels. Supported column names:
+## Reproducibility
 
-- image: `image`, `filename`, `file`, `id`, `path`
-- label: `label`, `text`, `prediction`, `target`
-
-## Setup
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-## Train
-
-```powershell
-python -m src.train --data-dir data --epochs 35 --batch-size 64 --img-height 64 --img-width 256
-```
-
-The best checkpoint is saved to `outputs/checkpoints/best.pt`.
-
-## Predict
-
-```powershell
-python -m src.predict --data-dir data --checkpoint outputs/checkpoints/best.pt --out outputs/submission.csv
-```
-
-Rename the final file according to the problem statement:
+Run the notebook in Google Colab with GPU enabled:
 
 ```text
-submission_<name>_<enroll no.>.csv
+Runtime → Change runtime type → T4 GPU
 ```
 
-## Notebook
+The notebook saves the best model checkpoint and final submission file directly to Google Drive under:
 
-Open `notebooks/CIG_Distorted_Sequence_CRNN_CTC.ipynb` for the full documented workflow:
+```text
+Cig_Ai_open_project/outputs/
+```
 
-- problem understanding
-- data checks
-- preprocessing and augmentation
-- model architecture
-- training strategy
-- CER validation
-- test prediction and CSV generation
+## Output
+
+Final prediction file:
+
+```text
+outputs/submission_navya_24119034.csv
+```
 
